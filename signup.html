@@ -22,6 +22,7 @@
             --card-bg: rgba(29, 29, 31, 0.8);
             --glass-bg: rgba(255, 255, 255, 0.05);
             --glow: 0 0 20px rgba(0, 122, 255, 0.3);
+            --success: #34C759;
         }
 
         body {
@@ -257,7 +258,7 @@
             color: var(--secondary);
         }
 
-        /* Modal */
+        /* Modals */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -290,18 +291,28 @@
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             border: 1px solid var(--glass-bg);
-            transform: scale(0.9);
-            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: scale(0.7) translateY(50px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .modal-overlay.active .modal {
-            transform: scale(1);
+            transform: scale(1) translateY(0);
+            opacity: 1;
         }
 
         .modal-icon {
-            font-size: 3rem;
-            color: #FF9500;
+            font-size: 4rem;
             margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .warning-icon {
+            color: #FF9500;
+        }
+
+        .success-icon {
+            color: var(--success);
         }
 
         .modal h2 {
@@ -347,6 +358,58 @@
 
         .modal-btn.secondary:hover {
             background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Success Animation */
+        @keyframes checkmark {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes confetti {
+            0% {
+                transform: translateY(0) rotate(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--success);
+            opacity: 0;
+            z-index: 1001;
         }
 
         /* Responsive */
@@ -398,6 +461,43 @@
         .shake {
             animation: shake 0.4s ease;
         }
+
+        /* Success checkmark */
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: var(--success);
+            stroke-miterlimit: 10;
+            margin: 0 auto;
+            box-shadow: inset 0 0 0 var(--success);
+            animation: checkmark 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: var(--success);
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+        }
+
+        @keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -445,6 +545,7 @@
                         <label class="form-label" for="package-id">Package ID</label>
                         <input type="text" id="package-id" class="form-input" placeholder="Enter your Package ID" required>
                     </div>
+                    <!-- SUBMIT BUTTON ADDED HERE -->
                     <button type="submit" class="submit-btn">Create Account</button>
                     <div class="form-footer">
                         <p>Already have an account? <button type="button" class="toggle-form" data-target="login">Log In</button></p>
@@ -473,7 +574,7 @@
     <!-- Package ID Modal -->
     <div class="modal-overlay" id="package-modal">
         <div class="modal">
-            <div class="modal-icon">
+            <div class="modal-icon warning-icon">
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
             <h2>Package ID Required</h2>
@@ -481,6 +582,23 @@
             <div class="modal-buttons">
                 <button class="modal-btn secondary" id="modal-cancel">Cancel</button>
                 <a href="package.html" class="modal-btn primary">Purchase Package ID</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="success-modal">
+        <div class="modal">
+            <div class="modal-icon success-icon">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+            <h2 id="success-title">Success!</h2>
+            <p id="success-message">Your action was completed successfully.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" id="success-ok">Continue</button>
             </div>
         </div>
     </div>
@@ -534,6 +652,31 @@
         const packageIdInput = document.getElementById('package-id');
         const modalCancel = document.getElementById('modal-cancel');
 
+        // Success Modal
+        const successModal = document.getElementById('success-modal');
+        const successTitle = document.getElementById('success-title');
+        const successMessage = document.getElementById('success-message');
+        const successOk = document.getElementById('success-ok');
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#34C759', '#007AFF', '#5856D6', '#FF2D55', '#FF9500'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animation = `confetti ${Math.random() * 3 + 2}s linear forwards`;
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Signup form handler
         signupForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
@@ -547,11 +690,35 @@
                 // Show modal
                 packageModal.classList.add('active');
             } else {
-                // In a real app, you would submit the form here
-                alert('Account created successfully!');
-                // For demo purposes, we'll just reset the form
-                signupForm.reset();
+                // Show success modal for registration
+                successTitle.textContent = 'Registration Successful!';
+                successMessage.textContent = 'Welcome to Earnzy! Your account has been created successfully.';
+                successModal.classList.add('active');
+                createConfetti();
+                
+                // Reset form after successful registration
+                setTimeout(() => {
+                    signupForm.reset();
+                }, 1000);
             }
+        });
+
+        // Login form handler
+        const loginForm = document.getElementById('login-form');
+        
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Show success modal for login
+            successTitle.textContent = 'Login Successful!';
+            successMessage.textContent = 'Welcome back to Earnzy! You have successfully logged in.';
+            successModal.classList.add('active');
+            createConfetti();
+            
+            // Reset form after successful submission
+            setTimeout(() => {
+                loginForm.reset();
+            }, 1000);
         });
 
         // Modal close handlers
@@ -559,9 +726,19 @@
             packageModal.classList.remove('active');
         });
 
+        successOk.addEventListener('click', () => {
+            successModal.classList.remove('active');
+        });
+
         packageModal.addEventListener('click', (e) => {
             if (e.target === packageModal) {
                 packageModal.classList.remove('active');
+            }
+        });
+
+        successModal.addEventListener('click', (e) => {
+            if (e.target === successModal) {
+                successModal.classList.remove('active');
             }
         });
 
@@ -576,17 +753,6 @@
             input.addEventListener('blur', () => {
                 input.parentElement.style.transform = 'translateY(0)';
             });
-        });
-
-        // Login form handler
-        const loginForm = document.getElementById('login-form');
-        
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            // In a real app, you would submit the login form here
-            alert('Logged in successfully!');
-            // For demo purposes, we'll just reset the form
-            loginForm.reset();
         });
 
         // Add subtle background animation
