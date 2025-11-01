@@ -19,19 +19,84 @@
             --text: #F5F5F7;
             --text-secondary: #A1A1A6;
             --background: #000000;
-            --card-bg: rgba(29, 29, 31, 0.8);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glow: 0 0 20px rgba(0, 122, 255, 0.3);
+            --card-bg: rgba(29, 29, 31, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glow: 0 0 30px rgba(0, 122, 255, 0.4);
             --success: #34C759;
+            --warning: #FF9500;
         }
 
         body {
-            background-color: var(--background);
+            background: linear-gradient(135deg, #000000, #1a1a2e, #16213e);
             color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(135deg, #000428, #004e92);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 15s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(100px, 50px) rotate(90deg);
+            }
+            50% {
+                transform: translate(50px, 100px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-50px, 50px) rotate(270deg);
+            }
         }
 
         /* Navigation */
@@ -40,16 +105,30 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
+            font-size: 2rem;
+            font-weight: 800;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 122, 255, 0.3);
         }
 
         .back-home {
@@ -57,14 +136,20 @@
             text-decoration: none;
             font-size: 1rem;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            background: var(--glass-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .back-home:hover {
             color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
         }
 
         /* Main Content */
@@ -74,19 +159,43 @@
             justify-content: center;
             align-items: center;
             padding: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .auth-card {
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
+            backdrop-filter: blur(40px);
+            border-radius: 24px;
             padding: 3rem;
             width: 100%;
-            max-width: 450px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--glass-bg);
+            max-width: 480px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
+            animation: cardAppear 0.8s ease-out;
+        }
+
+        @keyframes cardAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .auth-card::before {
@@ -95,8 +204,18 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% {
+                background-position: -200% 0;
+            }
+            50% {
+                background-position: 200% 0;
+            }
         }
 
         .form-header {
@@ -105,14 +224,17 @@
         }
 
         .form-header h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
+            font-size: 2.5rem;
+            font-weight: 800;
             margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .form-header p {
             color: var(--text-secondary);
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
 
         /* Form Switcher */
@@ -120,14 +242,15 @@
             display: flex;
             background: var(--glass-bg);
             border-radius: 50px;
-            padding: 0.3rem;
-            margin-bottom: 2rem;
+            padding: 0.4rem;
+            margin-bottom: 2.5rem;
             position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .switcher-btn {
             flex: 1;
-            padding: 0.8rem 1.5rem;
+            padding: 1rem 1.5rem;
             border: none;
             background: transparent;
             color: var(--text-secondary);
@@ -136,6 +259,7 @@
             transition: all 0.3s ease;
             border-radius: 50px;
             z-index: 1;
+            font-size: 1rem;
         }
 
         .switcher-btn.active {
@@ -144,13 +268,13 @@
 
         .switcher-indicator {
             position: absolute;
-            top: 0.3rem;
-            left: 0.3rem;
-            height: calc(100% - 0.6rem);
-            width: calc(50% - 0.6rem);
-            background: var(--primary);
+            top: 0.4rem;
+            left: 0.4rem;
+            height: calc(100% - 0.8rem);
+            width: calc(50% - 0.8rem);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: 50px;
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             box-shadow: var(--glow);
         }
 
@@ -166,7 +290,7 @@
         .forms-container {
             position: relative;
             overflow: hidden;
-            min-height: 400px;
+            min-height: 420px;
         }
 
         .form {
@@ -176,7 +300,7 @@
             width: 100%;
             opacity: 0;
             transform: translateX(50px);
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             pointer-events: none;
         }
 
@@ -187,23 +311,32 @@
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
+            position: relative;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             font-weight: 600;
             color: var(--text);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-label i {
+            color: var(--primary);
+            font-size: 1rem;
         }
 
         .form-input {
             width: 100%;
-            padding: 1rem 1.2rem;
+            padding: 1.2rem 1.5rem;
             background: var(--glass-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
             color: var(--text);
             font-size: 1rem;
             transition: all 0.3s ease;
@@ -212,7 +345,8 @@
         .form-input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15);
+            transform: translateY(-2px);
         }
 
         .form-input::placeholder {
@@ -221,41 +355,64 @@
 
         .submit-btn {
             width: 100%;
-            padding: 1.2rem;
-            background: var(--primary);
+            padding: 1.3rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             font-size: 1.1rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
         }
 
         .submit-btn:hover {
-            background: var(--secondary);
+            transform: translateY(-3px);
             box-shadow: var(--glow);
-            transform: translateY(-2px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-btn:hover::after {
+            left: 100%;
         }
 
         .form-footer {
             text-align: center;
-            margin-top: 2rem;
+            margin-top: 2.5rem;
             color: var(--text-secondary);
+            font-size: 0.95rem;
         }
 
         .toggle-form {
             color: var(--primary);
             background: none;
             border: none;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            text-decoration: underline;
         }
 
         .toggle-form:hover {
             color: var(--secondary);
+            transform: translateY(-1px);
         }
 
         /* Modals */
@@ -265,15 +422,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
         }
 
         .modal-overlay.active {
@@ -283,14 +440,14 @@
 
         .modal {
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2.5rem;
-            max-width: 400px;
+            backdrop-filter: blur(40px);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 450px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--glass-bg);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transform: scale(0.7) translateY(50px);
             opacity: 0;
             transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -302,77 +459,10 @@
         }
 
         .modal-icon {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            display: inline-block;
-        }
-
-        .warning-icon {
-            color: #FF9500;
-        }
-
-        .success-icon {
-            color: var(--success);
-        }
-
-        .modal h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .modal p {
-            color: var(--text-secondary);
+            font-size: 5rem;
             margin-bottom: 2rem;
-            line-height: 1.5;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .modal-btn {
-            flex: 1;
-            padding: 1rem;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .modal-btn.primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .modal-btn.primary:hover {
-            background: var(--secondary);
-            box-shadow: var(--glow);
-        }
-
-        .modal-btn.secondary {
-            background: var(--glass-bg);
-            color: var(--text);
-        }
-
-        .modal-btn.secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Success Animation */
-        @keyframes checkmark {
-            0% {
-                transform: scale(0);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
+            display: inline-block;
+            animation: bounceIn 1s ease-out;
         }
 
         @keyframes bounceIn {
@@ -381,7 +471,7 @@
                 opacity: 0;
             }
             50% {
-                transform: scale(1.05);
+                transform: scale(1.1);
             }
             70% {
                 transform: scale(0.9);
@@ -392,105 +482,115 @@
             }
         }
 
+        .warning-icon {
+            color: var(--warning);
+        }
+
+        .success-icon {
+            color: var(--success);
+        }
+
+        .modal h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            font-weight: 700;
+        }
+
+        .modal p {
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .modal-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .modal-btn.secondary {
+            background: var(--glass-bg);
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Success Animation */
         @keyframes confetti {
             0% {
-                transform: translateY(0) rotate(0);
+                transform: translateY(0) rotate(0) scale(1);
                 opacity: 1;
             }
             100% {
-                transform: translateY(100vh) rotate(720deg);
+                transform: translateY(100vh) rotate(720deg) scale(0);
                 opacity: 0;
             }
         }
 
         .confetti {
             position: fixed;
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             background: var(--success);
             opacity: 0;
             z-index: 1001;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .auth-card {
-                padding: 2rem;
-                margin: 1rem;
-            }
-
-            .form-header h1 {
-                font-size: 1.8rem;
-            }
-
-            nav {
-                padding: 1rem 5%;
-            }
-
-            .container {
-                padding: 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .auth-card {
-                padding: 1.5rem;
-            }
-
-            .form-header h1 {
-                font-size: 1.6rem;
-            }
-
-            .switcher-btn {
-                padding: 0.7rem 1rem;
-                font-size: 0.9rem;
-            }
-
-            .modal-buttons {
-                flex-direction: column;
-            }
-        }
-
-        /* Animation for form inputs */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .shake {
-            animation: shake 0.4s ease;
+            border-radius: 2px;
         }
 
         /* Success checkmark */
         .checkmark {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             display: block;
-            stroke-width: 2;
+            stroke-width: 3;
             stroke: var(--success);
             stroke-miterlimit: 10;
             margin: 0 auto;
             box-shadow: inset 0 0 0 var(--success);
-            animation: checkmark 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+            animation: checkmark 0.8s cubic-bezier(0.65, 0, 0.45, 1) forwards;
         }
 
         .checkmark__circle {
             stroke-dasharray: 166;
             stroke-dashoffset: 166;
-            stroke-width: 2;
+            stroke-width: 3;
             stroke-miterlimit: 10;
             stroke: var(--success);
             fill: none;
-            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+            animation: stroke 0.8s cubic-bezier(0.65, 0, 0.45, 1) forwards;
         }
 
         .checkmark__check {
             transform-origin: 50% 50%;
             stroke-dasharray: 48;
             stroke-dashoffset: 48;
-            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+            animation: stroke 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
         }
 
         @keyframes stroke {
@@ -498,9 +598,104 @@
                 stroke-dashoffset: 0;
             }
         }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .auth-card {
+                padding: 2.5rem;
+                margin: 1rem;
+            }
+
+            .form-header h1 {
+                font-size: 2.2rem;
+            }
+
+            nav {
+                padding: 1.2rem 5%;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .modal {
+                padding: 2.5rem 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-header h1 {
+                font-size: 2rem;
+            }
+
+            .switcher-btn {
+                padding: 0.9rem 1.2rem;
+                font-size: 0.95rem;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .form-input {
+                padding: 1rem 1.2rem;
+            }
+        }
+
+        /* Animation for form inputs */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease;
+        }
+
+        /* Loading animation */
+        .loading-dots {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .loading-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: loading 1.4s infinite ease-in-out;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes loading {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav>
         <div class="logo">Earnzy</div>
@@ -514,8 +709,8 @@
     <div class="container">
         <div class="auth-card">
             <div class="form-header">
-                <h1>Welcome to Earnzy</h1>
-                <p>Start turning your time into money today</p>
+                <h1>Join Earnzy Today</h1>
+                <p>Start your journey to financial freedom</p>
             </div>
 
             <!-- Form Switcher -->
@@ -530,23 +725,39 @@
                 <!-- Sign Up Form -->
                 <form class="form active" id="signup-form">
                     <div class="form-group">
-                        <label class="form-label" for="fullname">Full Name</label>
+                        <label class="form-label" for="fullname">
+                            <i class="fas fa-user"></i>
+                            Full Name
+                        </label>
                         <input type="text" id="fullname" class="form-input" placeholder="Enter your full name" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="email">Email</label>
+                        <label class="form-label" for="email">
+                            <i class="fas fa-envelope"></i>
+                            Email
+                        </label>
                         <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="password">Password</label>
-                        <input type="password" id="password" class="form-input" placeholder="Create a password" required>
+                        <label class="form-label" for="password">
+                            <i class="fas fa-lock"></i>
+                            Password
+                        </label>
+                        <input type="password" id="password" class="form-input" placeholder="Create a strong password" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="package-id">Package ID</label>
+                        <label class="form-label" for="package-id">
+                            <i class="fas fa-gift"></i>
+                            Package ID
+                        </label>
                         <input type="text" id="package-id" class="form-input" placeholder="Enter your Package ID" required>
                     </div>
-                    <!-- SUBMIT BUTTON ADDED HERE -->
-                    <button type="submit" class="submit-btn">Create Account</button>
+                    
+                    <!-- SUBMIT BUTTON -->
+                    <button type="submit" class="submit-btn" id="signup-submit">
+                        Create Account
+                    </button>
+                    
                     <div class="form-footer">
                         <p>Already have an account? <button type="button" class="toggle-form" data-target="login">Log In</button></p>
                     </div>
@@ -555,14 +766,25 @@
                 <!-- Log In Form -->
                 <form class="form" id="login-form">
                     <div class="form-group">
-                        <label class="form-label" for="login-email">Email</label>
+                        <label class="form-label" for="login-email">
+                            <i class="fas fa-envelope"></i>
+                            Email
+                        </label>
                         <input type="email" id="login-email" class="form-input" placeholder="Enter your email" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="login-password">Password</label>
+                        <label class="form-label" for="login-password">
+                            <i class="fas fa-lock"></i>
+                            Password
+                        </label>
                         <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required>
                     </div>
-                    <button type="submit" class="submit-btn">Log In</button>
+                    
+                    <!-- SUBMIT BUTTON -->
+                    <button type="submit" class="submit-btn" id="login-submit">
+                        Log In
+                    </button>
+                    
                     <div class="form-footer">
                         <p>Don't have an account? <button type="button" class="toggle-form" data-target="signup">Sign Up</button></p>
                     </div>
@@ -658,16 +880,20 @@
         const successMessage = document.getElementById('success-message');
         const successOk = document.getElementById('success-ok');
 
+        // Submit buttons
+        const signupSubmitBtn = document.getElementById('signup-submit');
+        const loginSubmitBtn = document.getElementById('login-submit');
+
         // Create confetti effect
         function createConfetti() {
-            const colors = ['#34C759', '#007AFF', '#5856D6', '#FF2D55', '#FF9500'];
-            for (let i = 0; i < 50; i++) {
+            const colors = ['#34C759', '#007AFF', '#5856D6', '#FF2D55', '#FF9500', '#AF52DE', '#FF3B30'];
+            for (let i = 0; i < 80; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
                 confetti.style.left = Math.random() * 100 + 'vw';
                 confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
                 confetti.style.animation = `confetti ${Math.random() * 3 + 2}s linear forwards`;
-                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animationDelay = Math.random() * 1.5 + 's';
                 document.body.appendChild(confetti);
                 
                 setTimeout(() => {
@@ -676,49 +902,77 @@
             }
         }
 
+        // Loading state for buttons
+        function setLoading(button, isLoading) {
+            if (isLoading) {
+                button.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
+                button.disabled = true;
+            } else {
+                if (button.id === 'signup-submit') {
+                    button.innerHTML = 'Create Account';
+                } else {
+                    button.innerHTML = 'Log In';
+                }
+                button.disabled = false;
+            }
+        }
+
         // Signup form handler
-        signupForm.addEventListener('submit', (e) => {
+        signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            setLoading(signupSubmitBtn, true);
+            
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
             
             if (!packageIdInput.value.trim()) {
                 // Show shake animation on empty package ID
                 packageIdInput.classList.add('shake');
                 setTimeout(() => {
                     packageIdInput.classList.remove('shake');
-                }, 400);
+                }, 500);
                 
                 // Show modal
                 packageModal.classList.add('active');
+                setLoading(signupSubmitBtn, false);
             } else {
                 // Show success modal for registration
                 successTitle.textContent = 'Registration Successful!';
-                successMessage.textContent = 'Welcome to Earnzy! Your account has been created successfully.';
+                successMessage.textContent = 'Welcome to Earnzy! Your account has been created successfully. Redirecting to dashboard...';
                 successModal.classList.add('active');
                 createConfetti();
                 
                 // Reset form after successful registration
                 setTimeout(() => {
                     signupForm.reset();
-                }, 1000);
+                    setLoading(signupSubmitBtn, false);
+                }, 2000);
             }
         });
 
         // Login form handler
         const loginForm = document.getElementById('login-form');
         
-        loginForm.addEventListener('submit', (e) => {
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            setLoading(loginSubmitBtn, true);
+            
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
             
             // Show success modal for login
             successTitle.textContent = 'Login Successful!';
-            successMessage.textContent = 'Welcome back to Earnzy! You have successfully logged in.';
+            successMessage.textContent = 'Welcome back to Earnzy! You have successfully logged in. Redirecting...';
             successModal.classList.add('active');
             createConfetti();
             
             // Reset form after successful submission
             setTimeout(() => {
                 loginForm.reset();
-            }, 1000);
+                setLoading(loginSubmitBtn, false);
+            }, 2000);
         });
 
         // Modal close handlers
@@ -762,8 +1016,15 @@
             const y = e.clientY / window.innerHeight;
             
             cards.forEach(card => {
-                card.style.transform = `perspective(1000px) rotateX(${y * 2}deg) rotateY(${x * 2}deg)`;
+                card.style.transform = `perspective(1000px) rotateX(${y * 1}deg) rotateY(${x * 1}deg)`;
             });
+        });
+
+        // Initial animation
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
         });
     </script>
 </body>
